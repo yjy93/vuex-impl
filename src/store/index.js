@@ -1,7 +1,10 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+// import Vuex from 'vuex'
+import Vuex from '@/vuex-impl/index'
 
-Vue.use(Vuex)
+
+// Vue.use 会默认调用 插件的 install 方法
+Vue.use(Vuex)// Vuex 中是一个对象, 对象里有两个Store , install方法
 
 export default new Vuex.Store({
   state: {
@@ -10,6 +13,7 @@ export default new Vuex.Store({
   },
   getters: {
     myAge(state) {
+      console.log('myAge -> 执行');
       return state.age + 20
     }
   }, // computed
