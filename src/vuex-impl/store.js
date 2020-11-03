@@ -20,8 +20,6 @@ export class Store {// vuex 是基于Vue 来实现的.
     // this.state 是vuex中的state options.state 是用户配置的state
     // 哪里的数据是响应式的 ?  new Vue 实例中的 data 属性是响应式的
     let computed = {}
-
-
     this.getters = {}
 
     forEachValue(options.getters, (value, key) => {
@@ -33,7 +31,7 @@ export class Store {// vuex 是基于Vue 来实现的.
         // 每次取值,都会重新执行用户的方法,性能差, 我希望第一次取值,就能把结果缓存下来
         get: () => {
           return this._vm[key];//取 computed 的key属性,计算属性也会被代理到实例上
-        }
+        },
       })
     })
 
@@ -44,10 +42,31 @@ export class Store {// vuex 是基于Vue 来实现的.
       },
       computed,
     })
+
+    this.mutations = {}
+    this.actions = {}
+    forEachValue(options.mutations, (fn, key) => {
+      this.mutations[key] = (payload) => {
+        fn.call(this, this.state, payload)
+      }
+    })
+    forEachValue(options.actions, (fn, key) => {
+      this.actions[key] = (payload) => {
+        fn.call(this, this, payload)
+      }
+    })
   }
 
   get state() {
     return this._vm._data.$$state
+  }
+
+  // ES7 类中的箭头函数, 不是es6 箭头函数
+  commit = (type, payload) => {
+    this.mutations[type](payload)
+  }
+  dispatch = (type, payload) => {// 原型方法
+    this.actions[type](payload)
   }
 }
 
