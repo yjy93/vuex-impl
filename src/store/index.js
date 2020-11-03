@@ -1,6 +1,6 @@
 import Vue from 'vue'
 // import Vuex from 'vuex'
-import Vuex from '@/vuex-impl/index'
+import Vuex from '@/vuex-impl/index' // 自己实现的 vuex
 
 
 // Vue.use 会默认调用 插件的 install 方法
@@ -30,5 +30,30 @@ export default new Vuex.Store({
       }, 1000)
     }
   },
-  modules: {}
+  modules: {
+    a: {
+      namespaced: true,
+      state: {
+        name: 'A',
+        age: 88
+      },
+      mutations: {
+        changeAge(state, payload) {
+          state.age = state.age + payload
+        }
+      },
+    },
+    b: {
+      namespaced: true,
+      state: {
+        name: 'B',
+        age: 33
+      },
+      mutations: {
+        changeAge(state, payload) {
+          state.age = state.age + payload
+        }
+      },
+    }
+  }
 })
